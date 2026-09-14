@@ -1,0 +1,18 @@
+{
+  "name": "ftcvideohub-telemetry-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Read-only SQLite telemetry dashboard for the FTC Video Hub consumer app.",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "seed": "node scripts/seed-demo-db.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2"
+  }
+}

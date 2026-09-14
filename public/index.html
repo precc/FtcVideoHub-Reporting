@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FTC Video Hub Telemetry</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">FTC Video Hub</p>
+          <h1>Telemetry Dashboard</h1>
+        </div>
+        <div class="db-badge" id="dbStatus">Loading…</div>
+      </header>
+
+      <main class="dashboard">
+        <section class="kpi-grid" id="kpiGrid"></section>
+
+        <section class="panel-grid two-col">
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Top videos</h2>
+            </div>
+            <div id="topVideos" class="table-wrap"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Section activity</h2>
+            </div>
+            <div id="sectionActivity" class="list-wrap"></div>
+          </article>
+        </section>
+
+        <section class="panel-grid two-col">
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Geography</h2>
+            </div>
+            <div id="geography" class="list-wrap"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h2>Recent events</h2>
+            </div>
+            <div id="recentEvents" class="table-wrap compact"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
