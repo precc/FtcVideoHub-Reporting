@@ -67,7 +67,14 @@ async function main() {
       }
 
       if (trimmed.toLowerCase() === 's') {
-        console.log(`Skipped ${row.video_id}`);
+        const skipUpd = db.prepare('UPDATE discovered_videos SET reviewed = 1 WHERE video_id = ?');
+        const skipInfo = skipUpd.run(row.video_id);
+
+        if (skipInfo.changes && skipInfo.changes > 0) {
+          console.log(`Marked ${row.video_id} reviewed (category unchanged, skipped).`);
+        } else {
+          console.warn(`Failed to update ${row.video_id}.`);
+        }
         continue;
       }
 
