@@ -50,3 +50,13 @@ The default location is `./data/telemetry.db`. The default port is `3100` to avo
 This app expects a SQLite database with the `events` table described by the FTC Video Hub telemetry schema.
 
 The app opens the database in read-only mode and does not write to it.
+
+## Run Review Program
+
+```
+npm run review
+```
+or,
+```
+node scripts/review-videos.js
+```
