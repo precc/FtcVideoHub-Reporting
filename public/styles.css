@@ -125,6 +125,12 @@ h2 {
   margin-bottom: 12px;
 }
 
+.panel-meta {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
 .table-wrap table,
 .list-wrap {
   width: 100%;

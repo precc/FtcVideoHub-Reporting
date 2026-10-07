@@ -4,6 +4,7 @@ async function loadDashboard() {
   const topVideos = document.getElementById('topVideos');
   const sectionActivity = document.getElementById('sectionActivity');
   const geography = document.getElementById('geography');
+  const geographyTotal = document.getElementById('geographyTotal');
   const recentEvents = document.getElementById('recentEvents');
 
   try {
@@ -37,6 +38,8 @@ async function loadDashboard() {
 
     topVideos.innerHTML = renderVideoTable(payload.topVideos);
     sectionActivity.innerHTML = renderList(payload.sectionActivity, 'category', 'active_visitors');
+    const countryCount = payload.geography ? payload.geography.length : 0;
+    geographyTotal.textContent = `${countryCount.toLocaleString()} ${countryCount === 1 ? 'country' : 'countries'}`;
     geography.innerHTML = renderList(payload.geography, 'country', 'visitors');
     recentEvents.innerHTML = renderRecentEvents(payload.recentEvents);
   } catch (error) {
