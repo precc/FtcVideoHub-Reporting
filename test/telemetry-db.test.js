@@ -19,6 +19,8 @@ test('dashboard data loads from the SQLite telemetry table', () => {
   assert.equal(result.ok, true);
   assert.equal(typeof result.summary.totalEvents, 'number');
   assert.ok(result.summary.totalEvents > 0);
+  assert.equal(typeof result.summary.totalSearches, 'number');
+  assert.ok(result.summary.totalSearches > 0);
   assert.ok(result.summary.weeklyActiveUsers >= 1);
   assert.ok(Array.isArray(result.topVideos));
   assert.ok(Array.isArray(result.sectionActivity));

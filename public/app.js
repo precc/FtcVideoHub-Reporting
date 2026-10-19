@@ -23,6 +23,7 @@ async function loadDashboard() {
 
     const cards = [
       { label: 'Total events', value: payload.summary.totalEvents.toLocaleString(), meta: 'all time' },
+      { label: 'Total searches', value: payload.summary.totalSearches.toLocaleString(), meta: 'search button clicks' },
       { label: 'Weekly active users', value: payload.summary.weeklyActiveUsers.toLocaleString(), meta: 'last 7 days' },
       { label: 'Monthly active users', value: payload.summary.monthlyActiveUsers.toLocaleString(), meta: 'last 30 days' },
       { label: 'Latest event', value: payload.summary.latestEvent ? payload.summary.latestEvent.event : '—', meta: payload.summary.latestEvent ? new Date(payload.summary.latestEvent.created_at).toLocaleString() : 'No data' }

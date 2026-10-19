@@ -37,29 +37,46 @@ const insert = db.prepare(`
   VALUES (@event, @category, @video_id, @video_title, @publisher, @visitor_id, @country, @path, @created_at)
 `);
 
+// Timestamps are generated relative to seed time (minutes ago) rather than
+// hardcoded dates, so the demo data always falls inside the dashboard's
+// weekly/monthly activity windows no matter when `npm run seed` is run.
+const NOW = Date.now();
+function minutesAgo(minutes) {
+  return new Date(NOW - minutes * 60 * 1000).toISOString();
+}
+
 const sample = [
-  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-001', country: 'US', path: '/', created_at: '2026-09-08T12:00:00.000Z' },
-  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-002', country: 'CA', path: '/', created_at: '2026-09-09T10:50:00.000Z' },
-  { event: 'section_view', category: 'kickoff', video_id: null, video_title: null, publisher: null, visitor_id: 'v-001', country: 'US', path: '/', created_at: '2026-09-08T12:05:00.000Z' },
-  { event: 'section_view', category: 'starter-bot', video_id: null, video_title: null, publisher: null, visitor_id: 'v-002', country: 'CA', path: '/', created_at: '2026-09-09T10:55:00.000Z' },
-  { event: 'video_view', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-001', country: 'US', path: '/', created_at: '2026-09-08T12:07:00.500Z' },
-  { event: 'video_view', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-003', country: 'US', path: '/', created_at: '2026-09-10T09:00:00.500Z' },
-  { event: 'video_view', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-004', country: 'GB', path: '/', created_at: '2026-09-11T09:00:00.500Z' },
-  { event: 'video_view', category: 'starter-bot', video_id: 'vid-2', video_title: 'Starter Bot Tutorial', publisher: 'Field Robotics', visitor_id: 'v-002', country: 'CA', path: '/', created_at: '2026-09-09T11:00:00.500Z' },
-  { event: 'video_view', category: 'starter-bot', video_id: 'vid-2', video_title: 'Starter Bot Tutorial', publisher: 'Field Robotics', visitor_id: 'v-005', country: 'US', path: '/', created_at: '2026-09-12T18:30:00.500Z' },
-  { event: 'video_view', category: 'prototypes', video_id: 'vid-3', video_title: 'Prototype Review', publisher: 'Build Lab', visitor_id: 'v-006', country: 'AU', path: '/', created_at: '2026-09-13T14:00:00.500Z' },
-  { event: 'video_click', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-001', country: 'US', path: '/', created_at: '2026-09-08T12:09:00.000Z' },
-  { event: 'video_click', category: 'starter-bot', video_id: 'vid-2', video_title: 'Starter Bot Tutorial', publisher: 'Field Robotics', visitor_id: 'v-005', country: 'US', path: '/', created_at: '2026-09-12T18:35:00.000Z' },
-  { event: 'video_click', category: 'prototypes', video_id: 'vid-3', video_title: 'Prototype Review', publisher: 'Build Lab', visitor_id: 'v-006', country: 'AU', path: '/', created_at: '2026-09-13T14:03:00.000Z' },
-  { event: 'video_click', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-004', country: 'GB', path: '/', created_at: '2026-09-11T09:05:00.000Z' },
-  { event: 'section_view', category: 'game-analysis', video_id: null, video_title: null, publisher: null, visitor_id: 'v-004', country: 'GB', path: '/', created_at: '2026-09-11T09:10:00.000Z' },
-  { event: 'section_view', category: 'field', video_id: null, video_title: null, publisher: null, visitor_id: 'v-006', country: 'AU', path: '/', created_at: '2026-09-13T14:10:00.000Z' },
-  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-007', country: 'DE', path: '/', created_at: '2026-09-13T15:00:00.000Z' },
-  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-008', country: 'US', path: '/', created_at: '2026-09-12T08:00:00.000Z' },
-  { event: 'video_view', category: 'game-analysis', video_id: 'vid-4', video_title: 'Game Analysis Deep Dive', publisher: 'League Watch', visitor_id: 'v-009', country: 'FR', path: '/', created_at: '2026-09-13T08:00:00.500Z' },
-  { event: 'video_click', category: 'game-analysis', video_id: 'vid-4', video_title: 'Game Analysis Deep Dive', publisher: 'League Watch', visitor_id: 'v-009', country: 'FR', path: '/', created_at: '2026-09-13T08:02:00.000Z' },
-  { event: 'video_view', category: 'field', video_id: 'vid-5', video_title: 'Field Build Walkthrough', publisher: 'Robot Lab', visitor_id: 'v-010', country: 'US', path: '/', created_at: '2026-09-12T14:00:00.500Z' },
-  { event: 'video_view', category: 'field', video_id: 'vid-5', video_title: 'Field Build Walkthrough', publisher: 'Robot Lab', visitor_id: 'v-011', country: 'US', path: '/', created_at: '2026-09-12T14:05:00.500Z' }
+  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-001', country: 'US', path: '/', created_at: minutesAgo(7444) },
+  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-002', country: 'CA', path: '/', created_at: minutesAgo(6074) },
+  { event: 'section_view', category: 'kickoff', video_id: null, video_title: null, publisher: null, visitor_id: 'v-001', country: 'US', path: '/', created_at: minutesAgo(7439) },
+  { event: 'section_view', category: 'starter-bot', video_id: null, video_title: null, publisher: null, visitor_id: 'v-002', country: 'CA', path: '/', created_at: minutesAgo(6069) },
+  { event: 'video_view', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-001', country: 'US', path: '/', created_at: minutesAgo(7437) },
+  { event: 'video_view', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-003', country: 'US', path: '/', created_at: minutesAgo(4744) },
+  { event: 'video_view', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-004', country: 'GB', path: '/', created_at: minutesAgo(3304) },
+  { event: 'video_view', category: 'starter-bot', video_id: 'vid-2', video_title: 'Starter Bot Tutorial', publisher: 'Field Robotics', visitor_id: 'v-002', country: 'CA', path: '/', created_at: minutesAgo(6064) },
+  { event: 'video_view', category: 'starter-bot', video_id: 'vid-2', video_title: 'Starter Bot Tutorial', publisher: 'Field Robotics', visitor_id: 'v-005', country: 'US', path: '/', created_at: minutesAgo(1294) },
+  { event: 'video_view', category: 'prototypes', video_id: 'vid-3', video_title: 'Prototype Review', publisher: 'Build Lab', visitor_id: 'v-006', country: 'AU', path: '/', created_at: minutesAgo(124) },
+  { event: 'video_click', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-001', country: 'US', path: '/', created_at: minutesAgo(7435) },
+  { event: 'video_click', category: 'starter-bot', video_id: 'vid-2', video_title: 'Starter Bot Tutorial', publisher: 'Field Robotics', visitor_id: 'v-005', country: 'US', path: '/', created_at: minutesAgo(1289) },
+  { event: 'video_click', category: 'prototypes', video_id: 'vid-3', video_title: 'Prototype Review', publisher: 'Build Lab', visitor_id: 'v-006', country: 'AU', path: '/', created_at: minutesAgo(121) },
+  { event: 'video_click', category: 'kickoff', video_id: 'vid-1', video_title: 'Kickoff Episode 1', publisher: 'FTC Hub', visitor_id: 'v-004', country: 'GB', path: '/', created_at: minutesAgo(3299) },
+  { event: 'section_view', category: 'game-analysis', video_id: null, video_title: null, publisher: null, visitor_id: 'v-004', country: 'GB', path: '/', created_at: minutesAgo(3294) },
+  { event: 'section_view', category: 'field', video_id: null, video_title: null, publisher: null, visitor_id: 'v-006', country: 'AU', path: '/', created_at: minutesAgo(114) },
+  { event: 'section_view', category: 'prototypes', video_id: null, video_title: null, publisher: null, visitor_id: 'v-006', country: 'AU', path: '/', created_at: minutesAgo(126) },
+  { event: 'section_view', category: 'match', video_id: null, video_title: null, publisher: null, visitor_id: 'v-012', country: 'MX', path: '/', created_at: minutesAgo(4) },
+  { event: 'video_view', category: 'match', video_id: 'vid-6', video_title: 'Match Highlights Week 3', publisher: 'Scouting Crew', visitor_id: 'v-012', country: 'MX', path: '/', created_at: minutesAgo(2) },
+  { event: 'video_click', category: 'match', video_id: 'vid-6', video_title: 'Match Highlights Week 3', publisher: 'Scouting Crew', visitor_id: 'v-012', country: 'MX', path: '/', created_at: minutesAgo(0) },
+  { event: 'video_click', category: 'field', video_id: 'vid-5', video_title: 'Field Build Walkthrough', publisher: 'Robot Lab', visitor_id: 'v-011', country: 'US', path: '/', created_at: minutesAgo(1556) },
+  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-007', country: 'DE', path: '/', created_at: minutesAgo(64) },
+  { event: 'page_view', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-008', country: 'US', path: '/', created_at: minutesAgo(1924) },
+  { event: 'video_view', category: 'game-analysis', video_id: 'vid-4', video_title: 'Game Analysis Deep Dive', publisher: 'League Watch', visitor_id: 'v-009', country: 'FR', path: '/', created_at: minutesAgo(484) },
+  { event: 'video_click', category: 'game-analysis', video_id: 'vid-4', video_title: 'Game Analysis Deep Dive', publisher: 'League Watch', visitor_id: 'v-009', country: 'FR', path: '/', created_at: minutesAgo(482) },
+  { event: 'video_view', category: 'field', video_id: 'vid-5', video_title: 'Field Build Walkthrough', publisher: 'Robot Lab', visitor_id: 'v-010', country: 'US', path: '/', created_at: minutesAgo(1564) },
+  { event: 'video_view', category: 'field', video_id: 'vid-5', video_title: 'Field Build Walkthrough', publisher: 'Robot Lab', visitor_id: 'v-011', country: 'US', path: '/', created_at: minutesAgo(1559) },
+  { event: 'search_click', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-007', country: 'DE', path: '/', created_at: minutesAgo(70) },
+  { event: 'search_click', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-002', country: 'CA', path: '/', created_at: minutesAgo(6070) },
+  { event: 'search_click', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-009', country: 'FR', path: '/', created_at: minutesAgo(483) },
+  { event: 'search_click', category: null, video_id: null, video_title: null, publisher: null, visitor_id: 'v-012', country: 'MX', path: '/', created_at: minutesAgo(3) }
 ];
 
 const tx = db.transaction((rows) => {

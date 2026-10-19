@@ -32,7 +32,7 @@ A simple read-only web dashboard for visualizing the SQLite telemetry data produ
    npm start
    ```
 
-4. Open http://localhost:3000
+4. Open http://localhost:3100
 
 ## Environment
 
